@@ -2,12 +2,16 @@
 import { PROYECTOS } from "@/consts";
 ---
 
-<section class="grid sm:grid-cols-2 md:grid-cols-3 gap-5 p-5 my-10">
+<section class="grid min-[500px]:grid-cols-2 md:grid-cols-3 gap-5 p-5 my-10">
   {
     PROYECTOS.map((proyecto) => {
       return (
         <article class="bg-blue-700 rounded-lg overflow-hidden">
-          <img src={proyecto.imagen} alt={proyecto.titulo} />
+          <img
+            class="w-full aspect-video object-cover"
+            src={proyecto.imagen}
+            alt={proyecto.titulo}
+          />
 
           <div class="p-2">
             <h2 class="text-xl font-semibold"> {proyecto.titulo} </h2>
