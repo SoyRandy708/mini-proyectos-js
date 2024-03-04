@@ -3,24 +3,52 @@ const plano = canvas.getContext('2d')
 const sprite = document.querySelector('#sprite')
 const bricks = document.querySelector('#bricks')
 
-canvas.width = 400 // window.innerWidth - 100
+canvas.width = 450 // window.innerWidth - 100
 canvas.height = 400
 
 const PELOTA = {
   TAMAÑO: 5,
   X: canvas.width / 2,
   Y: canvas.height - 30,
-  VELOCIDAD_X: 1,
-  VELOCIDAD_Y: -1,
+  VELOCIDAD_X: 1.5,
+  VELOCIDAD_Y: -1.5,
 }
 
 const BARRA = {
-  WIDTH: 75,
+  WIDTH: 50,
   HEIGTH: 10,
-  X: (canvas.width - 75) / 2,
+  X: (canvas.width - 50) / 2,
   Y: canvas.height - 20,
   RIGTH: false,
   LEFT: false,
+}
+
+const BLOQUES = {
+  FILAS: 6,
+  COLUMNAS: 12,
+  WIDTH: 32,
+  HEIGTH: 16,
+  TOP: 40,
+  LEFT: 35,
+  ACTIVO: true,
+  GRILLA: []
+}
+
+for (let c = 0; c < BLOQUES.COLUMNAS; c++) {
+  BLOQUES.GRILLA[c] = []
+
+  for (let f = 0; f < BLOQUES.FILAS; f++) {
+    const bloqueX = c * BLOQUES.WIDTH + BLOQUES.LEFT
+    const bloqueY = f * BLOQUES.HEIGTH + BLOQUES.TOP
+    const random = Math.floor(Math.random() * 8)
+
+    BLOQUES.GRILLA[c][f] = {
+      X: bloqueX,
+      Y: bloqueY,
+      STATUS: BLOQUES.ACTIVO,
+      COLOR: random
+    }
+  }
 }
 
 const limpiarCanvas = () => {
@@ -36,15 +64,64 @@ const dibujarPelota = () => {
 }
 
 const dibujarBarra = () => {
-  plano.fillRect(BARRA.X, BARRA.Y, BARRA.WIDTH, BARRA.HEIGTH)
+  plano.drawImage(
+    sprite,
+    30,
+    175,
+    BARRA.WIDTH,
+    BARRA.HEIGTH,
+    BARRA.X,
+    BARRA.Y,
+    BARRA.WIDTH,
+    BARRA.HEIGTH
+  )
 }
 
 const dibujarBloques = () => {
+  for (let c = 0; c < BLOQUES.COLUMNAS; c++) {
+    for (let f = 0; f < BLOQUES.FILAS; f++) {
+      const bloqueActual = BLOQUES.GRILLA[c][f]
+      const bloqueX = bloqueActual.COLOR * 32
 
+      if (!bloqueActual.STATUS) continue
+
+      plano.drawImage(
+        bricks,
+        bloqueX,
+        0,
+        BLOQUES.WIDTH,
+        BLOQUES.HEIGTH,
+        bloqueActual.X,
+        bloqueActual.Y,
+        BLOQUES.WIDTH,
+        BLOQUES.HEIGTH,
+      )
+    }
+  }
 }
 
-const deteccionColision = () => {
+const colisionBloques = () => {
+  for (let c = 0; c < BLOQUES.COLUMNAS; c++) {
+    for (let f = 0; f < BLOQUES.FILAS; f++) {
+      const bloqueActual = BLOQUES.GRILLA[c][f]
 
+      if (!bloqueActual.STATUS) continue
+
+      const isBallSameXAsBrick =
+        PELOTA.X > bloqueActual.X &&
+        PELOTA.X < bloqueActual.X + BLOQUES.WIDTH
+
+      const isBallSameYAsBrick =
+        PELOTA.Y > bloqueActual.Y &&
+        PELOTA.Y < bloqueActual.Y + BLOQUES.HEIGTH
+
+      if (isBallSameXAsBrick && isBallSameYAsBrick) {
+        bloqueActual.STATUS = false
+        PELOTA.VELOCIDAD_Y = -PELOTA.VELOCIDAD_Y
+      }
+
+    }
+  }
 }
 
 const movimientoBarra = () => {
@@ -118,7 +195,7 @@ const dibujar = () => {
   dibujarBarra()
   dibujarBloques()
 
-  deteccionColision()
+  colisionBloques()
   movimientoBarra()
   movimientoPelota()
 
