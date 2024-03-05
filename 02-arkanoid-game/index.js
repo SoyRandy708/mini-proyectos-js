@@ -1,24 +1,28 @@
-const canvas = document.querySelector('canvas')
-const plano = canvas.getContext('2d')
-const sprite = document.querySelector('#sprite')
-const bricks = document.querySelector('#bricks')
+const $canvas = document.querySelector('canvas')
+const $plano = $canvas.getContext('2d')
+const $sprite = document.querySelector('#sprite')
+const $bricks = document.querySelector('#bricks')
 
-canvas.width = 450 // window.innerWidth - 100
-canvas.height = 400
+$canvas.width = 450 // window.innerWidth - 100 TODO: Hacerlo con distintas medidas
+$canvas.height = 400
+
+const velocidades = [1.5, -1.5]
+const indiceAleatorio = Math.floor(Math.random() * velocidades.length)
 
 const PELOTA = {
   TAMAÑO: 5,
-  X: canvas.width / 2,
-  Y: canvas.height - 30,
-  VELOCIDAD_X: 1.5,
+  X: Math.floor((Math.random() * $canvas.width - 19) + 10), // TODO: No funciona muy el eje X de forma random
+  Y: $canvas.height - 30,
+  VELOCIDAD_X: velocidades[indiceAleatorio],
   VELOCIDAD_Y: -1.5,
 }
+console.log(PELOTA.X)
 
 const BARRA = {
   WIDTH: 50,
   HEIGTH: 10,
-  X: (canvas.width - 50) / 2,
-  Y: canvas.height - 20,
+  X: ($canvas.width - 50) / 2,
+  Y: $canvas.height - 20,
   RIGTH: false,
   LEFT: false,
 }
@@ -52,20 +56,20 @@ for (let c = 0; c < BLOQUES.COLUMNAS; c++) {
 }
 
 const limpiarCanvas = () => {
-  plano.clearRect(0, 0, canvas.width, canvas.height)
+  $plano.clearRect(0, 0, $canvas.width, $canvas.height)
 }
 
 const dibujarPelota = () => {
-  plano.beginPath()
-  plano.arc(PELOTA.X, PELOTA.Y, PELOTA.TAMAÑO, 0, Math.PI * 2)
-  plano.fillStyle = 'white'
-  plano.fill()
-  plano.closePath()
+  $plano.beginPath()
+  $plano.arc(PELOTA.X, PELOTA.Y, PELOTA.TAMAÑO, 0, Math.PI * 2)
+  $plano.fillStyle = 'white'
+  $plano.fill()
+  $plano.closePath()
 }
 
 const dibujarBarra = () => {
-  plano.drawImage(
-    sprite,
+  $plano.drawImage(
+    $sprite,
     30,
     175,
     BARRA.WIDTH,
@@ -85,8 +89,8 @@ const dibujarBloques = () => {
 
       if (!bloqueActual.STATUS) continue
 
-      plano.drawImage(
-        bricks,
+      $plano.drawImage(
+        $bricks,
         bloqueX,
         0,
         BLOQUES.WIDTH,
@@ -119,13 +123,12 @@ const colisionBloques = () => {
         bloqueActual.STATUS = false
         PELOTA.VELOCIDAD_Y = -PELOTA.VELOCIDAD_Y
       }
-
     }
   }
 }
 
 const movimientoBarra = () => {
-  if (BARRA.RIGTH && BARRA.X < canvas.width - BARRA.WIDTH) {
+  if (BARRA.RIGTH && BARRA.X < $canvas.width - BARRA.WIDTH) {
     BARRA.X += 4
   } else if (BARRA.LEFT && BARRA.X > 0) {
     BARRA.X -= 4
@@ -134,7 +137,7 @@ const movimientoBarra = () => {
 
 const movimientoPelota = () => {
   if ( // COLISION DE PAREDES LATERALES
-    PELOTA.X + PELOTA.VELOCIDAD_X > canvas.width - PELOTA.TAMAÑO ||
+    PELOTA.X + PELOTA.VELOCIDAD_X > $canvas.width - PELOTA.TAMAÑO ||
     PELOTA.X + PELOTA.VELOCIDAD_X < PELOTA.TAMAÑO
   ) {
     PELOTA.VELOCIDAD_X = -PELOTA.VELOCIDAD_X
@@ -153,7 +156,7 @@ const movimientoPelota = () => {
   ) {
     PELOTA.VELOCIDAD_Y = - PELOTA.VELOCIDAD_Y
   } else if ( // COLISION CON EL SUELO
-    PELOTA.Y + PELOTA.VELOCIDAD_Y > canvas.height - PELOTA.TAMAÑO
+    PELOTA.Y + PELOTA.VELOCIDAD_Y > $canvas.height - PELOTA.TAMAÑO
   ) {
     document.location.reload()
   }
