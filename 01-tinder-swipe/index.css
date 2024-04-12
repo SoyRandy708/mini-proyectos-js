@@ -19,7 +19,7 @@ main {
   min-height: 100vh;
   padding: 24px 24px 36px 24px;
   overflow: hidden;
-  background: url('./photos/iphone.webp') no-repeat;
+  background: url('https://pub-f2166e82e8a447aca3e1787fac4b59bd.r2.dev/tinder-swipe/iphone.webp') no-repeat;
   background-size: contain;
   filter: drop-shadow(0 0 10px gray);
 }
@@ -155,7 +155,7 @@ footer {
     height: 32px;
     border-radius: 50%;
     border: none;
-    background: url('./photos/tinder-icons.webp') no-repeat;
+    background: url('https://pub-f2166e82e8a447aca3e1787fac4b59bd.r2.dev/tinder-swipe/tinder-icons.webp') no-repeat;
     background-position: 0px;
     background-size: 175px;
     cursor: pointer;
