@@ -12,5 +12,5 @@ main {
 canvas {
   border: 4px solid white;
   border-bottom: none;
-  background: url('./photos/background.png') repeat;
+  background: url('https://pub-f2166e82e8a447aca3e1787fac4b59bd.r2.dev/arkanoid-game/background.png') repeat;
 }
